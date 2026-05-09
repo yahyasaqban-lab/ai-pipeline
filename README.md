@@ -53,7 +53,7 @@ source setup.sh   # adds the `ai` command to your shell
 ### Manual Setup
 
 ```bash
-# 1. Set your DeepSeek API key
+# 1. Set your DeepSeek API key (or skip for local-only mode)
 export DEEPSEEK_API_KEY="sk-your-key-here"
 
 # 2. (Optional) Add to ~/.bashrc or ~/.zshrc for persistence
@@ -72,6 +72,65 @@ python3 ai.py code "Build a trading bot"
 python3 ai.py media --script "Explain Bitcoin"
 python3 ai.py model status
 ```
+
+---
+
+## 🦙 Using a Local Model (Ollama) Instead of DeepSeek
+
+No API key? No problem. Run entirely offline with Ollama.
+
+### 1. Install Ollama
+
+```bash
+# macOS (your M2)
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Or via Homebrew
+brew install ollama
+```
+
+### 2. Pull a model
+
+```bash
+ollama pull llama3.2          # Lightweight (3B, fast)
+ollama pull llama3.1          # Balanced (8B)
+ollama pull qwen2.5:32b       # Powerful (32B, needs good RAM)
+```
+
+### 3. Run Ollama server
+
+```bash
+ollama serve &
+```
+
+### 4. Use ai-pipeline without DeepSeek key
+
+Simply **don't set** `DEEPSEEK_API_KEY`. The `ai chat` module auto-detects:
+
+```bash
+unset DEEPSEEK_API_KEY
+ai chat "Hello, how are you?"
+# → Output: 🖥️ Local model (free, private)
+# → Uses Ollama's API at http://localhost:11434/v1
+```
+
+You can also set a custom Ollama endpoint or model by editing `chat/chat.py`:
+
+```python
+# In __init__:
+self.client = OpenAI(api_key="ollama", base_url="http://localhost:11434/v1")
+self.model = "llama3.2"   # Change this to any model you pulled
+```
+
+### Local vs API Comparison
+
+| | DeepSeek API | Ollama (local) |
+|---|---|---|
+| **Cost** | ~$0.28/M tokens | Free |
+| **Speed** | Fast (cloud GPU) | Depends on model size |
+| **Privacy** | Data sent to API | 100% local |
+| **Requires** | API key + internet | Ollama installed + model downloaded |
+| **M2 Ultra** | Overkill but works | Leverages 192GB RAM for big models |
 
 ---
 
