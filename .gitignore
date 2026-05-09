@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+.venv/
+venv/
+
+# Environment
+.env
+.env.local
+*.key
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+ai-code-projects/
+ai-media/
+.ai-chat-history/
+.ai-models/
+temp_*.html
+temp_music_gen.py
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
